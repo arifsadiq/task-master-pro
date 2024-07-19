@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskmasterpro-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: taskmasterpro
+  template:
+    metadata:
+      labels:
+        app: taskmasterpro
+    spec:
+      containers:
+      - name: taskmasterpro
+        image: ari786/taskmasterpro:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: taskmasterpro-svc
+spec:
+  selector:
+    app: taskmasterpro
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+
